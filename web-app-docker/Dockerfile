@@ -22,15 +22,17 @@ RUN apt update && apt install -y supervisor
 
 # Create directory for supervisord config
 RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Copy files from host
 COPY html/ /var/www/html/
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Give permissions
+# Setup permissions
 RUN chown -R $USERNAME:$USERNAME /var/www/html && \
     usermod -aG sudo $USERNAME && \
-    echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # Expose SSH and HTTP ports
 EXPOSE 22 80
