@@ -10,15 +10,12 @@ ENV SSH_PORT=${SSH_PORT}
 
 # Update package repo and install Apache and SSH
 RUN apt-get update && \
-    apt-get install -y apache2 openssh-server && \
+    apt-get install -y apache2 openssh-server supervisor && \
     rm -rf /var/lib/apt/lists/*
 
 # Create user and set password
 RUN useradd -m $USERNAME && \
     echo "$USERNAME:password" | chpasswd
-
-# Install Supervisor
-RUN apt update && apt install -y supervisor
 
 # Create directory for supervisord config
 RUN mkdir -p /var/log/supervisor

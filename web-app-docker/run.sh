@@ -29,7 +29,7 @@ docker run -d \
   -p $SSH_PORT:22 \
   --name apache-ssh \
   -v apache-data:/var/www/html \
-  my-apache-app
+  apache-app
 
 # Wait a second for container to boot
 sleep 1
